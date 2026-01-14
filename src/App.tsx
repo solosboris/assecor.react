@@ -8,10 +8,21 @@ import { CreatePersonForm } from "./components/CreatePersonForm";
 function AppContent() {
 
   const [persons, setPersons] = useState<PersonDTO[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [searchResult, setSearchResult] = useState<PersonDTO[] | null>(null);
   const location = useLocation();
 
   const loadAll = async () => {
-    setPersons(await getAllPersons());
+    setLoading(true);
+    setError(null);
+    try {
+      setPersons(await getAllPersons());
+    } catch (e) {
+      setError("Failed to load persons " + e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -23,6 +34,7 @@ function AppContent() {
   return (
     <>
       <h2>Persons</h2>
+      <h4>{ error }</h4>
       <Link to="/create">Add&nbsp;new&nbsp;person</Link>
       <Routes>
         <Route path="/" element={

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import type { PersonDTO } from "../types/person";
 
 import { getPersonById, getPersonsByColor, getPersonsByColorCount } from "../services/rest";
