@@ -85,6 +85,10 @@ npx cypress open or npx cypress run
 npm run dev
 npm start
 
+-- docker devel
+docker compose -f docker-compose.dev.yml up
+
+-- prod
 docker build -t assecor.react .
 docker run -p 5173:80 assecor.react
 
