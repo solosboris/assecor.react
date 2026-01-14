@@ -79,6 +79,8 @@ npm install axios
 npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 npm install -D flush-promises
 npm install react-router-dom
+npm install -D cypress
+npx cypress open or npx cypress run
 
 npm run dev
 npm start

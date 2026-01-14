@@ -35,7 +35,7 @@ function AppContent() {
     <>
       <h2>Persons</h2>
       <h4>{ error }</h4>
-      <Link to="/create">Add&nbsp;new&nbsp;person</Link>
+      <Link to="/create">Add person</Link>
       <Routes>
         <Route path="/" element={
             <>

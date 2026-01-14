@@ -58,7 +58,7 @@ export function SortableTable({
         </thead>
         <tbody>
           {sorted.map((p) => (
-            <tr key={p.id} onContextMenu={(e) => {
+            <tr data-testid="person-row" key={p.id} onContextMenu={(e) => {
                 if (!enableContextMenu) {
                   return;
                 }

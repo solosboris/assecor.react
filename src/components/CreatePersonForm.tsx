@@ -17,7 +17,6 @@ export function CreatePersonForm() {
   const createNewPerson = async () => {
     try {
       await addPerson(form);
-      // redirect to main page (App.tsx -> "/")
     } catch (err) {
       console.error("Failed to create person", err);
     }
@@ -25,20 +24,17 @@ export function CreatePersonForm() {
 
   return (
     <div>
-      <h3>Add&nbsp;Person</h3>
+      <h3>Add Person</h3>
       {Object.entries(form).map(([key, value]) => (
         <input key={key} placeholder={key} value={value}
           onChange={(e) => setForm({ ...form, [key]: e.target.value })
           }
         />
       ))}
-
-      <button type="button"
-        onClick={() => {
-                  createNewPerson();
-                  navigate("/");
-                }}
-        >Add</button>
+      <button data-testid="submit-person" type="button"
+          onClick={() => { createNewPerson(); navigate("/"); }}>
+        Add
+      </button>
       <button type="button" onClick={() => navigate("/")}>Cancel</button>
     </div>
   );
