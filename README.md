@@ -85,6 +85,9 @@ npx cypress open or npx cypress run
 npm run dev
 npm start
 
+docker build -t assecor.react .
+docker run -p 5173:80 assecor.react
+
 npm version
 {
   'assecor.react': '0.0.0',
