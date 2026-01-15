@@ -1,0 +1,63 @@
+name: CI Build, Test & Dockerize Frontend
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: assecor.react
+
+    steps:
+      # 1 Checkout repository
+      - uses: actions/checkout@v4
+
+      # 2 Setup Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # 3 Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # 4 Install Cypress
+      - name: Install Cypress
+        run: npx cypress install
+
+      # 5 Start Vite dev server in background
+      - name: Start Vite dev server
+        run: npm run dev -- --host &
+      
+      # 6 Wait for server to be ready
+      - name: Wait for dev server
+        run: |
+          echo "Waiting for server to be ready..."
+          npx wait-on http://localhost:5173
+
+      # 7 Run Cypress tests
+      - name: Run Cypress tests
+        run: npx cypress run
+
+      # 8 Build production frontend
+      - name: Build React app
+        run: npm run build
+
+      # 9 Build Docker image
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE_NAME .
+
+      #  Optional: push to Docker Hub
+      #- name: Push Docker image
+      #  uses: docker/login-action@v2
+      #  with:
+      #    username: ${{ secrets.DOCKER_USERNAME }}
+      #    password: ${{ secrets.DOCKER_PASSWORD }}
+      #
+      #- run: docker push $IMAGE_NAME

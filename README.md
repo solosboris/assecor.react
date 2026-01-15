@@ -80,15 +80,22 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 npm install -D flush-promises
 npm install react-router-dom
 npm install -D cypress
+npm install --save-dev jest @types/jest ts-jest
+npm install --save-dev jest-environment-jsdom
+npm install --save-dev @testing-library/react @testing-library/jest-dom
+npm install --save-dev jest ts-jest @types/jest @testing-library/react @testing-library/jest-dom @types/testing-library__jest-dom
+npm install --save-dev util
+npm install --save-dev @types/node
+
+npm test
 npx cypress open or npx cypress run
 
-npm run dev
-npm start
+npm run dev or npm start
 
 -- docker devel
 docker compose -f docker-compose.dev.yml up
 
--- prod
+-- docker prod
 docker build -t assecor.react .
 docker run -p 5173:80 assecor.react
 
@@ -124,6 +131,9 @@ npm version
   zlib: '1.3.1-470d3a2',
   zstd: '1.5.7'
 }
+
+node -v
+v22.20.0
 
 ng version
 

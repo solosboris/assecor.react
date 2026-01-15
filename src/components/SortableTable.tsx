@@ -16,7 +16,7 @@ export function SortableTable({
   const [asc, setAsc] = useState(true);
   const [searchResult, setSearchResult] = useState<PersonDTO[] | null>(null);
 
-  const sorted = [...data].sort((a, b) => {
+  const sorted = [...(data ?? [])].sort((a, b) => {
     const value1 = a[sortKey];
     const value2 = b[sortKey];
     if (value1 === value2) {
@@ -30,6 +30,7 @@ export function SortableTable({
   const searchById = async (id: number) => {
     const p = await getPersonById(String(id));
     setSearchResult([p]);
+    console.log(searchResult);
   };
 
   const searchByColor = async (color: string) => {
@@ -37,6 +38,7 @@ export function SortableTable({
     if (count > 1) {
       const list = await getPersonsByColor(color);
       setSearchResult(list);
+      console.log(searchResult);
     }
   };
   

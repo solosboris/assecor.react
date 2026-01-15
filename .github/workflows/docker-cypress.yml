@@ -1,0 +1,49 @@
+name: CI Docker Frontend with Cypress
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  docker-cypress:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: my-react-app
+
+    steps:
+      # 1 Checkout repo
+      - uses: actions/checkout@v4
+
+      # 2 Set up Node (needed for Cypress inside Docker)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # 3 Build Docker image
+      - name: Build Docker image
+        run: docker build -t $IMAGE_NAME .
+
+      # 4 Run Docker container in background
+      - name: Start container
+        run: |
+          docker run -d --name frontend-test -p 5173:80 $IMAGE_NAME
+
+      # 5 Wait for server to be ready
+      - name: Wait for frontend
+        run: npx wait-on http://localhost:5173
+
+      # 6 Install Cypress locally (inside GitHub runner)
+      - name: Install Cypress
+        run: npm ci && npx cypress install
+
+      # 7 Run Cypress tests against container
+      - name: Run Cypress tests
+        run: npx cypress run --config baseUrl=http://localhost:5173
+
+      # 8 Stop and remove Docker container
+      - name: Cleanup container
+        run: |
+          docker stop frontend-test
+          docker rm frontend-test

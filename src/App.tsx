@@ -10,7 +10,6 @@ function AppContent() {
   const [persons, setPersons] = useState<PersonDTO[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [searchResult, setSearchResult] = useState<PersonDTO[] | null>(null);
   const location = useLocation();
 
   const loadAll = async () => {
@@ -22,6 +21,7 @@ function AppContent() {
       setError("Failed to load persons " + e);
     } finally {
       setLoading(false);
+      console.log(loading);
     }
   };
 
@@ -35,12 +35,12 @@ function AppContent() {
     <>
       <h2>Persons</h2>
       <h4>{ error }</h4>
-      <Link to="/create">Add person</Link>
+      <Link to="/create" data-testid="go-to-create">Add&nbsp;person</Link>
       <Routes>
         <Route path="/" element={
             <>
-              <h3>All&nbsp;persons</h3>
-              <SortableTable data={persons} enableContextMenu />
+              <h3>All&nbsp;persons_</h3>
+              <SortableTable data={persons ?? []} enableContextMenu />
             </>
           }
         />

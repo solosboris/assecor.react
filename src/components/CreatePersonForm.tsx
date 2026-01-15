@@ -24,7 +24,7 @@ export function CreatePersonForm() {
 
   return (
     <div>
-      <h3>Add Person</h3>
+      <h3>Add&nbsp;Person</h3>
       {Object.entries(form).map(([key, value]) => (
         <input key={key} placeholder={key} value={value}
           onChange={(e) => setForm({ ...form, [key]: e.target.value })
