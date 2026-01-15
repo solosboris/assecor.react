@@ -86,11 +86,15 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom
 npm install --save-dev jest ts-jest @types/jest @testing-library/react @testing-library/jest-dom @types/testing-library__jest-dom
 npm install --save-dev util
 npm install --save-dev @types/node
+npm install -D babel-plugin-react-compiler@latest
+npm install vite-plugin-babel
+npm install -D @babel/plugin-proposal-class-properties babel-plugin-module-resolver
+npm install -D @babel/plugin-transform-class-properties babel-plugin-module-resolver
 
 npm test
 npx cypress open or npx cypress run
 
-npm run dev or npm start
+npm run dev
 
 -- docker devel
 docker compose -f docker-compose.dev.yml up
