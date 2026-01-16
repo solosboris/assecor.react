@@ -1,60 +1,76 @@
+import { Routes, Route, Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 import { getAllPersons } from "./services/rest";
 import type { PersonDTO } from "./types/person";
-import { SortableTable } from "./components/SortableTable";
-import { CreatePersonForm } from "./components/CreatePersonForm";
+import { SortableTable } from "./components/SortableTable/SortableTable";
+import { CreatePersonForm } from "./components/CreatePersonForm/CreatePersonForm";
 
-function AppContent() {
-
-  const [persons, setPersons] = useState<PersonDTO[]>([]);
+export default function App() {
+  const location = useLocation();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const location = useLocation();
+  const [persons, setPersons] = useState<PersonDTO[]>([]);
+  const noPersonFount: string = "No person has been found right now";
 
-  const loadAll = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      setPersons(await getAllPersons());
-    } catch (e) {
-      setError("Failed to load persons " + e);
-    } finally {
-      setLoading(false);
-      console.log(loading);
-    }
+  const onNewPerson = async () => {
+    const allPersons = await getAllPersons();
+    setPersons(
+      allPersons != null && allPersons.length > 0 ?
+        allPersons :
+        [{id: -1, name: "no person fount", lastName: "", zip: "", city: "", color: ""}]
+    );
   };
 
+
   useEffect(() => {
-    if (location.pathname === "/") {
-      loadAll();
+    //use the operator ==, not ===
+    if (location.pathname == "/") {
+      setError(null);
+      setLoading(true);
+      try {
+        getAllPersons()
+          .then(setPersons)
+          .finally(() => setLoading(false));
+      } catch (e) {
+        setError(
+          "Failed to load persons "
+            .concat(String(e))
+        );
+      } finally {
+        setLoading(false);
+      }
     }
   }, [location.pathname]);
 
   return (
     <>
       <h2>Persons</h2>
-      <h4>{ error }</h4>
-      <Link to="/create" data-testid="go-to-create">Add&nbsp;person</Link>
+      { error && <h4 className="error">{error}</h4> }
+      <Link to="/create" data-testid="go-to-create">
+        Add&nbsp;person
+      </Link>
+
+      {loading && <p className="error">Loading…</p>}
+      {
+        !loading && (persons == null || persons.length === 0)
+          && <p className="error">{noPersonFount}</p>
+      }
+
       <Routes>
-        <Route path="/" element={
-            <>
-              <h3>All&nbsp;persons_</h3>
-              <SortableTable data={persons ?? []} enableContextMenu />
-            </>
-          }
+        <Route path="/"
+                element={
+                  persons != null && persons.length > 0 ?
+                    <SortableTable data={persons} enableContextMenu={true} /> :
+                    <p className="error" data-testid="no-person-found">
+                      {noPersonFount}
+                    </p>
+                }
         />
-        <Route path="/create" element={<CreatePersonForm />} />
+        <Route path="/create" element={
+                                <CreatePersonForm onCreated={() => onNewPerson() }/>
+                              }
+        />
       </Routes>
     </>
-  );
-
-}
-
-export default function App() {
-  return (
-    <BrowserRouter>
-      <AppContent />
-    </BrowserRouter>
   );
 }

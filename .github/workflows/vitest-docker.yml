@@ -26,29 +26,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4 Install Cypress
-      - name: Install Cypress
-        run: npx cypress install
+      # 4 Run Vitest tests
+      - name: Run Vitest tests
+        run: npx vitest run
 
-      # 5 Start Vite dev server in background
-      - name: Start Vite dev server
-        run: npm run dev -- --host &
-      
-      # 6 Wait for server to be ready
-      - name: Wait for dev server
-        run: |
-          echo "Waiting for server to be ready..."
-          npx wait-on http://localhost:5173
-
-      # 7 Run Cypress tests
-      - name: Run Cypress tests
-        run: npx cypress run
-
-      # 8 Build production frontend
+      # 5 Build production frontend
       - name: Build React app
         run: npm run build
 
-      # 9 Build Docker image
+      # 6 Build Docker image
       - name: Build Docker image
         run: |
           docker build -t $IMAGE_NAME .

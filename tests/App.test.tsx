@@ -1,7 +1,13 @@
-import { render, screen } from '@testing-library/react';
-import App from '../src/App';
+import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import App from "../src/App";
 
-test('renders app title', () => {
-  render(<App />);
-  expect(screen.getByText(/persons_/i)).toBeInTheDocument();
+test("renders app title", async () => {
+  render(
+    <MemoryRouter>
+      <App />
+    </MemoryRouter>
+  );
+
+  expect(await screen.findByText("Persons")).toBeInTheDocument();
 });

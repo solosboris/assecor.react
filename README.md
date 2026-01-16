@@ -80,21 +80,44 @@ npm install -D vitest @testing-library/react @testing-library/jest-dom jsdom
 npm install -D flush-promises
 npm install react-router-dom
 npm install -D cypress
-npm install --save-dev jest @types/jest ts-jest
+
+pm install --save-dev jest @types/jest ts-jest
 npm install --save-dev jest-environment-jsdom
 npm install --save-dev @testing-library/react @testing-library/jest-dom
 npm install --save-dev jest ts-jest @types/jest @testing-library/react @testing-library/jest-dom @types/testing-library__jest-dom
+
 npm install --save-dev util
 npm install --save-dev @types/node
+
 npm install -D babel-plugin-react-compiler@latest
 npm install vite-plugin-babel
 npm install -D @babel/plugin-proposal-class-properties babel-plugin-module-resolver
 npm install -D @babel/plugin-transform-class-properties babel-plugin-module-resolver
 
-npm test
-npx cypress open or npx cypress run
+npm install -D @testing-library/user-event msw
+npm i vitest
 
-npm run dev
+npm remove jest ts-jest @types/jest jest-environment-jsdom
+npm remove @types/testing-library__jest-dom
+
+rm -rf node_modules package-lock.json
+
+npm install
+npm install -D babel-plugin-react-compiler@latest
+npm install vite-plugin-babel
+npm install -D @babel/plugin-transform-class-properties babel-plugin-module-resolver
+npm install -D @testing-library/user-event msw
+npm i vitest
+
+npm install --save-dev @types/node
+npm install --save-dev wait-on
+
+npm test or npx vitest run
+npx cypress open // visual by browser
+npx cypress run  // non-visual, monitor
+
+npm run dev   // development
+npm run build // production
 
 -- docker devel
 docker compose -f docker-compose.dev.yml up
@@ -103,43 +126,10 @@ docker compose -f docker-compose.dev.yml up
 docker build -t assecor.react .
 docker run -p 5173:80 assecor.react
 
-npm version
-{
-  'assecor.react': '0.0.0',
-  npm: '10.9.3',
-  node: '22.20.0',
-  acorn: '8.15.0',
-  ada: '2.9.2',
-  amaro: '1.1.2',
-  ares: '1.34.5',
-  brotli: '1.1.0',
-  cjs_module_lexer: '2.1.0',
-  cldr: '47.0',
-  icu: '77.1',
-  llhttp: '9.3.0',
-  modules: '127',
-  napi: '10',
-  nbytes: '0.1.1',
-  ncrypto: '0.0.1',
-  nghttp2: '1.64.0',
-  openssl: '3.5.2',
-  simdjson: '3.13.0',
-  simdutf: '6.4.2',
-  sqlite: '3.50.4',
-  tz: '2025b',
-  undici: '6.21.2',
-  unicode: '16.0',
-  uv: '1.51.0',
-  uvwasi: '0.0.23',
-  v8: '12.4.254.21-node.33',
-  zlib: '1.3.1-470d3a2',
-  zstd: '1.5.7'
-}
-
 node -v
 v22.20.0
 
-ng version
+npm version from ng version
 
 Angular CLI       : 21.0.1
 Node.js           : 22.20.0
@@ -152,3 +142,8 @@ Operating System  : win32 x64
 │ typescript │ 5.9.3             │ ~5.9.3            │
 │ vitest     │ 4.0.17            │ ^4.0.17           │
 └────────────┴───────────────────┴───────────────────┘
+
+Vitest	                                Cypress
+Fully controlled fake environment	  Real browser timing
+findByText waits by default	        get("table") does not wait for network
+MSW resolves immediately	          Cypress needs explicit wait

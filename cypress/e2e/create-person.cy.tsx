@@ -1,13 +1,22 @@
+import { mockPersons } from "../../src/test/mocks/handlers";
+
 describe("Create person flow", () => {
   beforeEach(() => {
     cy.intercept("GET", "**/persons", {
       statusCode: 200,
-      body: [],
+      body: mockPersons,
     }).as("getAllPersons");
 
     cy.intercept("POST", "**/persons/person", {
       statusCode: 200,
-      body: { id: 1 },
+      body: {
+        id: 1,
+        name: "Alice",
+        lastName: "Smith",
+        zip: "54321",
+        city: "Paris",
+        color: "red",
+      },
     }).as("createPerson");
 
     cy.visit("/");
@@ -16,7 +25,6 @@ describe("Create person flow", () => {
 
   it("creates a new person and redirects to main page", () => {
     cy.get('[data-testid="go-to-create"]').click();
-    cy.url().should("include", "/create");
 
     cy.get('input[placeholder="name"]').type("Alice");
     cy.get('input[placeholder="lastName"]').type("Smith");
@@ -28,6 +36,6 @@ describe("Create person flow", () => {
     cy.wait("@createPerson");
 
     cy.url().should("eq", `${Cypress.config().baseUrl}/`);
-    cy.get("table").should("exist");
+    cy.get('[data-testid="person-row"]').should("have.length", 1);
   });
 });

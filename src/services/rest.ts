@@ -1,8 +1,14 @@
 import axios from "axios";
 import type { PersonDTO, DTOsContainer } from "../types/person";
 
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
+if (!baseUrl) {
+  throw new Error("VITE_BASE_URL is not defined");
+}
+
 const api = axios.create({
-  baseURL: "http://localhost:8080",
+  baseURL: baseUrl,
 });
 
 export const getAllPersons = async (): Promise<PersonDTO[]> => {
@@ -25,7 +31,9 @@ export const getPersonsByColorCount = async (color: string): Promise<number> => 
   return res.data;
 };
 
-export const addPerson = async (person: Omit<PersonDTO, "id">): Promise<number> => {
+export const addPerson = async (
+  person: Omit<PersonDTO, "id">
+): Promise<number> => {
   const res = await api.post<number>("/persons/person", person);
   return res.data;
 };
